@@ -149,3 +149,7 @@ Additional usage details can be found with the -h option:
 
 If you have questions, you can find us on IRC in the `#codeascraft` channel on Freenode.
 
+### Running Tests
+
+    $ python tests/test_foo.py
+
