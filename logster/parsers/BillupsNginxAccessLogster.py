@@ -17,6 +17,7 @@ class BillupsNginxAccessLogster(LogsterParser):
         '''Initialize any data structures or variables needed for keeping track
         of the tasty bits we find in the log we are parsing.'''
         self.total_requests = 0
+        self.total_response_time = 0
         self.http_1xx = 0
         self.http_2xx = 0
         self.http_3xx = 0
@@ -42,6 +43,7 @@ class BillupsNginxAccessLogster(LogsterParser):
                 linebits = regMatch.groupdict()
 
                 self.total_requests += 1
+                self.total_response_time += float(linebits['response_time_seconds'])
 
                 status = int(linebits['http_status'])
 
@@ -71,6 +73,7 @@ class BillupsNginxAccessLogster(LogsterParser):
         # Return a list of metrics objects
         return [
             MetricObject("total_requests", (self.total_requests / self.duration), "Requests per sec"),
+            MetricObject("response_time_avg", (self.total_response_time / self.total_requests / self.duration), "Average response time"),
             MetricObject("http_1xx", (self.http_1xx / self.duration), "Responses per sec"),
             MetricObject("http_2xx", (self.http_2xx / self.duration), "Responses per sec"),
             MetricObject("http_3xx", (self.http_3xx / self.duration), "Responses per sec"),
